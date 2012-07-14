@@ -1,0 +1,26 @@
+ <html>
+   <head>
+   <title>Add a Topic</title>
+   <link href="../javascript/style.css" rel="stylesheet" type="text/css" />
+   </head>
+   <body>
+   <div class="container">
+	<ul id="saturday">
+	<li><a href="../member-index.php" class="left">HOME</a></li>
+	<li><a href="../member-profile.php?i=1" class="left">PROFILE</a></li>
+	<li><a href="topiclist.php">FORUM</a></li>
+	<li class="right"><a href="../logout.php">LOGOUT</a></li>
+	</ul>
+   <h1>Add a Topic</h1>
+   <form method=post action="do_addtopic.php">
+   <p><strong>Your E-Mail Address:</strong><br></p>
+   <input type="text" name="topic_owner" size=40 maxlength=150>
+  <p><strong>Topic Title:</strong><br></p>
+  <input type="text" name="topic_title" size=40 maxlength=150>
+  <P><strong>Post Text:</strong><br></P>
+  <textarea name="post_text" rows=8 cols=40 wrap=virtual></textarea>
+  <P><input type="submit" name="submit" value="Add Topic"></p>
+  </form>
+  </div>
+  </body>
+  </html>

@@ -1,0 +1,73 @@
+ <?php
+   //connect to server and select database; we'll need it soon
+    //Include database connection details
+	require_once ('../config.php');
+
+	//Connect to mysql server
+	$conn = mysql_connect(DB_HOST, DB_USER, DB_PASSWORD);
+	if(!$conn) {
+		die('Failed to connect to server: ' . mysql_error());
+	}
+	
+	//Select database
+	$db = mysql_select_db(DB_DATABASE);
+	if(!$db) {
+		die("Unable to select database");
+	}
+   
+      // showing the form; check for required item in query string
+     if (!$_GET[post_id]) {
+         header("Location: topiclist.php");
+         exit;
+     }
+  
+       //still have to verify topic and post
+     $verify = "select ft.topic_id, ft.topic_title from
+      forum_posts as fp left join forum_topics as ft on
+      fp.topic_id = ft.topic_id where fp.post_id = $_GET[post_id]";
+ 
+     $verify_res = mysql_query($verify, $conn) or die(mysql_error());
+      if (mysql_num_rows($verify_res) < 1) {
+         //this post or topic does not exist
+         header("Location: topiclist.php");
+         exit;
+      } else {
+         //get the topic id and title
+         $topic_id = mysql_result($verify_res,0,'topic_id');
+         $topic_title = stripslashes(mysql_result($verify_res,0,'topic_title'));
+  
+         print "
+         <html>
+         <head>
+         <title>Post Your Reply in $topic_title</title>
+		 <link href=\"../javascript/style.css\" rel=\"stylesheet\" type=\"text/css\" />
+         </head>
+         <body>
+		 <div class=\"container\">
+		 <ul id=\"saturday\">
+		 <li><a href=\"../member-index.php\" class=\"left\">HOME</a></li>
+		 <li><a href=\"../member-profile.php?i=1\" class=\"left\">PROFILE</a></li>
+		 <li><a href=\"topiclist.php\">FORUM</a></li>
+		 <li class=\"right\"><a href=\"../logout.php\">LOGOUT</a></li>
+		 </ul>
+         <h1>Post Your Reply in $topic_title</h1>
+         <form method=post action=\"doreplytopost.php\">
+  
+         <p><strong>Your E-Mail Address:</strong><br>
+         <input type=\"text\" name=\"post_owner\" size=40 maxlength=150>
+  
+         <P><strong>Post Text:</strong><br>
+         <textarea name=\"post_text\" rows=8 cols=40 wrap=virtual></textarea>
+  
+         <input type=\"hidden\" name=\"op\" value=\"addpost\">
+         <input type=\"hidden\" name=\"topic_id\" value=\"$topic_id\">
+  
+         <P><input type=\"submit\" name=\"submit\" value=\"Add Post\"></p>
+  
+         </form>
+		 </div>
+         </body>
+         </html>";
+     }
+  
+ ?>
